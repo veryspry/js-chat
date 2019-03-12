@@ -6,7 +6,7 @@ import styled from "styled-components";
 import { height, width, minHeight } from "styled-system";
 import { Flex, FooterText } from "../components";
 
-import { setAuthToken } from "../redux/actions";
+import { setUser } from "../redux/actions";
 
 const Form = styled.form`
   ${height};
@@ -79,14 +79,13 @@ class Auth extends Component {
       })
       .then(res => {
         console.log("res", res);
-        const { history, setAuthToken } = this.props;
+        const { history, setUser } = this.props;
         const {
-          data: { isAuthenticated, message, user, token }
+          data: { isAuthenticated, message, user }
         } = res;
 
         if (isAuthenticated) {
-          setAuthToken(token);
-          console.log("set", this.props);
+          setUser(user);
           history.push("/");
         }
       })
@@ -94,7 +93,6 @@ class Auth extends Component {
   };
 
   render() {
-    console.log("state", this.props);
     return (
       <Flex flexDirection="column" alignItems="center" my="70px">
         <Form width={["95vw", "80vw", "600px"]}>
@@ -128,14 +126,13 @@ class Auth extends Component {
 }
 
 const mapStateToProps = (state, ownProps) => {
-  console.log("stateToProps", state);
   return {
     ...state
   };
 };
 
 const mapDispatchToProps = (dispatch, ownProps) => ({
-  setAuthToken: authToken => dispatch(setAuthToken(authToken))
+  setUser: user => dispatch(setUser(user))
 });
 
 export default connect(

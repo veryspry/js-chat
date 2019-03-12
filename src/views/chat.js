@@ -57,15 +57,20 @@ class Chat extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      message: {
-        message: ""
-      },
+      message: "",
       messages: []
     };
   }
 
   componentDidMount() {
-    this.ws = new WebSocket("ws://dev.com:8080/ws");
+    const {
+      match: {
+        params: { roomID }
+      },
+      user: { ID: userID }
+    } = this.props;
+
+    this.ws = new WebSocket(`ws://dev.com:8080/ws/${roomID}?userID=${userID}`);
     this.ws.addEventListener("message", this._handleNewMessage);
   }
 
@@ -73,12 +78,17 @@ class Chat extends Component {
     this.ws.removeEventListener("message", this._handleNewMessage);
   }
 
-  _handleNewMessage = event => {
+  _handleNewMessage = async event => {
     let msg = JSON.parse(event.data);
-    console.log(msg);
+
+    console.log("m", msg);
+    this._addNewMessageToState(msg);
+  };
+
+  _addNewMessageToState = async msg => {
     let msgCopy = this.state.messages.slice();
     msgCopy.push(msg);
-    this.setState({
+    await this.setState({
       messages: msgCopy
     });
   };
@@ -86,27 +96,50 @@ class Chat extends Component {
   _handleChange = event => {
     const { name, value } = event.target;
     this.setState({
-      message: {
-        ...this.state.message,
-        [name]: value
-      }
+      [name]: value
     });
   };
 
   _handleSubmit = async event => {
     event.preventDefault();
+    const { message } = this.state;
+    const {
+      user: { ID: userID }
+    } = this.props;
 
-    this.ws.send(JSON.stringify(this.state.message));
+    const formattedMsg = {
+      message,
+      userID
+    };
+
+    this.ws.send(JSON.stringify(formattedMsg));
+    this._addNewMessageToState(formattedMsg);
+    await this.setState({
+      message: ""
+    });
   };
 
   render() {
-    console.log("p", this.props);
+    console.log("state", this.state);
+    const { ID: currUsrID } = this.props.user;
     return (
       <Flex flexDirection="column" alignItems="center" my="70px">
         <Form width={["95vw", "80vw", "600px"]}>
           <Flex>
-            {this.state.messages.map(({ message }) => {
-              return <FooterText>{message}</FooterText>;
+            {this.state.messages.map(({ message, userID }, i) => {
+              let bgColor = "lightblue";
+              let align = "flex-start";
+              if (userID === currUsrID) {
+                bgColor = "lightgrey";
+                align = "flex-end";
+              }
+              return (
+                <Flex key={i} width="100%" alignItems={align}>
+                  <Flex bg={bgColor} width="50%">
+                    <FooterText>{message}</FooterText>
+                  </Flex>
+                </Flex>
+              );
             })}
           </Flex>
           <InputWrap>
@@ -114,7 +147,7 @@ class Chat extends Component {
             <Input
               type="text"
               name="message"
-              value={this.state.message.message}
+              value={this.state.message}
               onChange={this._handleChange}
             />
           </InputWrap>
@@ -129,9 +162,9 @@ class Chat extends Component {
   }
 }
 
-const mapStateToProps = (state, ownProps) => {
+const mapStateToProps = ({ auth: { user } }, ownProps) => {
   return {
-    ...state
+    user: user
   };
 };
 

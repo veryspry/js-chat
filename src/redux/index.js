@@ -1,1 +1,3 @@
-export const rootReducer = () => {};
+import rootReducer from "./reducers";
+
+export const rootReducer;

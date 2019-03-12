@@ -14,16 +14,14 @@ module.exports = () => {
     entry: ["@babel/polyfill", path.join(__dirname, "src/index.js")],
     output: {
       filename: "bundle.js",
-      path: path.join(__dirname, "dist")
+      path: path.join(__dirname, "dist"),
+      publicPath: "/"
     },
     devServer: {
-      // publicPath determines where bundles are served from and takes precedenct over contentBase
-      //   publicPath: path.join(),
-      // ContentBase determines where to serve static files
       contentBase: path.join(__dirname, "public"),
       compress: true,
       port: 9000,
-      hot: true,
+      hot: false,
       open: false,
       overlay: true,
       historyApiFallback: true,
