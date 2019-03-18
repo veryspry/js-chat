@@ -14,6 +14,7 @@ import {
 } from "./typography";
 import Icon from "./icon";
 import TriangleBackground from "./triangle-background";
+import ChatList from "./chat-list";
 export {
   Flex,
   Box,
@@ -30,5 +31,6 @@ export {
   TimelineDate,
   Img,
   Icon,
-  TriangleBackground
+  TriangleBackground,
+  ChatList
 };

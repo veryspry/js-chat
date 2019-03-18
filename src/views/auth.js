@@ -78,7 +78,6 @@ class Auth extends Component {
         password: this.state.password
       })
       .then(res => {
-        console.log("res", res);
         const { history, setUser } = this.props;
         const {
           data: { isAuthenticated, message, user }
@@ -86,7 +85,7 @@ class Auth extends Component {
 
         if (isAuthenticated) {
           setUser(user);
-          history.push("/");
+          history.push("/chat");
         }
       })
       .catch(err => console.log(err));

@@ -1,4 +1,4 @@
-import { SET_AUTH_TOKEN, SET_USER } from "../actions";
+import { SET_AUTH_TOKEN, SET_USER, LOGOUT } from "../actions";
 
 const auth = (state = {}, action) => {
   switch (action.type) {
@@ -6,6 +6,8 @@ const auth = (state = {}, action) => {
       return Object.assign({}, state, { authToken: action.authToken });
     case SET_USER:
       return Object.assign({}, state, { user: action.user });
+    case LOGOUT:
+      return Object.assign({}, state, { user: null });
     default:
       return state;
   }

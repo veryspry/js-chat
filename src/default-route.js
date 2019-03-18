@@ -1,20 +1,29 @@
 import React, { Fragment } from "react";
 import { Route } from "react-router-dom";
-import { Header, Footer, TriangleBackground } from "./components";
+import { Header, Footer, Flex } from "./components";
+
+import { NotFound } from "./views";
+
+import { getCurrentUser } from "./utils";
 
 const Layout = props => {
   return (
-    <Fragment>
-      <TriangleBackground />
+    <Flex minHeight="100vh">
       <Header />
       {props.children}
       <Footer />
-    </Fragment>
+    </Flex>
   );
 };
 
 const DefaultRoute = props => {
-  const { component: Component, path, ...rest } = props;
+  const { component: Component, path, isAuthenticated, ...rest } = props;
+
+  const currentUser = getCurrentUser();
+
+  if (isAuthenticated && !currentUser) {
+    return <NotFound />;
+  }
 
   return (
     <Route

@@ -9,7 +9,7 @@ import { PersistGate } from "redux-persist/integration/react";
 
 import configureStore from "./redux/configureStore";
 
-import { Auth, Home, Chat } from "./views";
+import { Auth, Home, Chat, AllChat, NotFound } from "./views";
 import rootReducer from "./redux/reducers";
 import DefaultRoute from "./default-route";
 
@@ -18,6 +18,8 @@ import GlobalStyles from "./styles/global";
 import theme from "./theme";
 
 let { store, persistor } = configureStore();
+// Export the store object for use elsewhere
+export { store };
 
 class App extends Component {
   render() {
@@ -32,17 +34,19 @@ class App extends Component {
           <ThemeProvider theme={theme}>
             <BrowserRouter>
               <div>
-                <DefaultRoute exact path="/" component={Home} />
                 <DefaultRoute exact path="/login" component={Auth} />
-                {/* <DefaultRoute exact path="/chat" component={Chat} /> */}
+                <DefaultRoute
+                  exact
+                  path="/chat"
+                  component={AllChat}
+                  isAuthenticated
+                />
                 <DefaultRoute
                   path="/chat/:roomID([0-9a-fA-F]{8}\-[0-9a-fA-F]{4}\-[0-9a-fA-F]{4}\-[0-9a-fA-F]{4}\-[0-9a-fA-F]{12})"
                   component={Chat}
+                  isAuthenticated
                 />
-                {/* <DefaultRoute
-                  path="/"
-                  component={props => <div>Not found</div>}
-                /> */}
+                <DefaultRoute path="/" component={NotFound} />
               </div>
             </BrowserRouter>
           </ThemeProvider>

@@ -14,32 +14,30 @@ import {
   Icon
 } from "../components";
 
+import { logout, requestConstructor } from "../utils";
+
 const Header = props => {
   const navItems = [
     {
-      title: "Home",
-      to: ""
+      title: "Chat",
+      to: "/chat"
     },
+    // {
+    //   title: "New Chat",
+    //   to: "/chat",
+    //   onClick: e => {
+    //     e.preventDefault();
+    //     let requestor = requestConstructor();
+    //     requestor
+    //       .post(`/chat/conversations/new`)
+    //       .then(res => console.log("res", res))
+    //       .catch(err => console.log(err));
+    //   }
+    // },
     {
-      title: "Blog",
-      to: "/blog"
-    }
-  ];
-  const socialIcons = [
-    {
-      icon: faGithub,
-      to: "https://github.com/veryspry",
-      bg: "#ebe8ec"
-    },
-    {
-      icon: faTwitter,
-      to: "https://twitter.com/veryspry",
-      bg: "#26abec"
-    },
-    {
-      icon: faInstagram,
-      to: "https://www.instagram.com/veryspry/",
-      bg: "#cc2d8a"
+      title: "Logout",
+      to: "/login",
+      onClick: e => logout()
     }
   ];
 
@@ -48,61 +46,43 @@ const Header = props => {
       flexDirection={["column-reverse", "column-reverse", "row"]}
       justifyContent={["center", "center", "space-around"]}
       alignItems="center"
+      bg="lightpink"
     >
       <Flex
         flexDirection={["column", "column", "row"]}
         alignItems="center"
         textAlign="center"
       >
-        <Flex flexDirection="row" my={["20px", "20px", "0px"]} zIndex="4000">
-          {navItems.map(({ title, to }) => {
-            return (
-              <Box mx="10px" key={title}>
-                <StyledLink
-                  to={to}
-                  fontWeight="100"
-                  color="black"
-                  hovercolor="#2096c7"
-                  textDecoration="underline"
-                >
-                  <HeaderText>{title}</HeaderText>
-                </StyledLink>
-              </Box>
-            );
-          })}
-        </Flex>
-        <Flex flexDirection="row" my={["20px", "20px", "0px"]} zIndex="4000">
-          {socialIcons.map(({ icon, to, bg }) => {
-            return (
-              <Box mx="30px" key={bg}>
-                <StyledAnchor
-                  href={to}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                >
-                  <Icon
-                    icon={icon}
-                    bg={bg}
-                    size="2x"
+        <Flex
+          flexDirection="row"
+          my={["20px", "20px", "0px"]}
+          zIndex="4000"
+          justifyContent="space-between"
+          py="40px"
+        >
+          <HeaderText>
+            <StyledLink to="/chat">Go Chat!</StyledLink> 💬{" "}
+          </HeaderText>
+
+          <Flex flexDirection="row">
+            {navItems.map(({ title, to, onClick }) => {
+              return (
+                <Box mx="10px" key={title}>
+                  <StyledLink
+                    to={to}
+                    fontWeight="100"
                     color="black"
-                    p="10px"
-                    borderRadius="10px"
-                  />
-                </StyledAnchor>
-              </Box>
-            );
-          })}
+                    hovercolor="#2096c7"
+                    textDecoration="underline"
+                    onClick={onClick}
+                  >
+                    <HeaderText>{title}</HeaderText>
+                  </StyledLink>
+                </Box>
+              );
+            })}
+          </Flex>
         </Flex>
-      </Flex>
-      <Flex zIndex="4000">
-        <Img
-          src="/img/header-img.jpg"
-          alt="header-pic"
-          height="175px"
-          width="175px"
-          borderRadius="100%"
-          mt="20px"
-        />
       </Flex>
     </Flex>
   );

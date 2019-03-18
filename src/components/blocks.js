@@ -17,7 +17,8 @@ import {
   bottom,
   right,
   left,
-  overflow
+  overflow,
+  minHeight
 } from "styled-system";
 
 export const Flex = styled.div`
@@ -29,6 +30,7 @@ export const Flex = styled.div`
   ${width};
   ${color};
   ${height};
+  ${minHeight};
   ${borders};
   ${position};
   ${top};

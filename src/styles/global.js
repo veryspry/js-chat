@@ -9,6 +9,7 @@ const GlobalStyles = createGlobalStyle`
     body {
         padding: 0px;
         margin: 0px;
+        height: 100%;
     }
     h1, h2, h3, h4, h5, p {
         margin: 0;

@@ -1,12 +1,14 @@
 import React, { Component } from "react";
 import { withRouter } from "react-router-dom";
 import { connect } from "react-redux";
-import axios from "axios";
 import styled from "styled-components";
 import { height, width, minHeight } from "styled-system";
 import { Flex, FooterText } from "../components";
+import requestConstructor from "../utils/request";
 
 import { setAuthToken } from "../redux/actions";
+
+import ChatList from "../components";
 
 const Form = styled.form`
   ${height};
@@ -62,13 +64,26 @@ class Chat extends Component {
     };
   }
 
-  componentDidMount() {
+  async componentDidMount() {
     const {
       match: {
         params: { roomID }
       },
       user: { ID: userID }
     } = this.props;
+
+    const requestor = requestConstructor();
+
+    let messages = requestor
+      .get(`/chat/conversations/${roomID}/messages`)
+      .then(res => {
+        if (res.data.messages) {
+          this.setState({
+            messages: res.data.messages.Value
+          });
+        }
+      })
+      .catch(err => console.log(err));
 
     this.ws = new WebSocket(`ws://dev.com:8080/ws/${roomID}?userID=${userID}`);
     this.ws.addEventListener("message", this._handleNewMessage);
@@ -80,8 +95,6 @@ class Chat extends Component {
 
   _handleNewMessage = async event => {
     let msg = JSON.parse(event.data);
-
-    console.log("m", msg);
     this._addNewMessageToState(msg);
   };
 
@@ -120,7 +133,6 @@ class Chat extends Component {
   };
 
   render() {
-    console.log("state", this.state);
     const { ID: currUsrID } = this.props.user;
     return (
       <Flex flexDirection="column" alignItems="center" my="70px">
