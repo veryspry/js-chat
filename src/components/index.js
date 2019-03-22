@@ -13,8 +13,9 @@ import {
   TimelineDate
 } from "./typography";
 import Icon from "./icon";
-import TriangleBackground from "./triangle-background";
-import ChatList from "./chat-list";
+import ChatList from "./chat/list";
+import CreateChat from "./chat/create";
+import { Form, Input, TextArea, Button } from "./form";
 export {
   Flex,
   Box,
@@ -31,6 +32,10 @@ export {
   TimelineDate,
   Img,
   Icon,
-  TriangleBackground,
-  ChatList
+  ChatList,
+  CreateChat,
+  Form,
+  Input,
+  TextArea,
+  Button
 };

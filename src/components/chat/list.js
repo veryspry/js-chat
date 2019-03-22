@@ -1,8 +1,8 @@
 import React, { Component } from "react";
 import axios from "axios";
-import requestConstructor from "../utils/request";
+import requestConstructor from "../../utils/request";
 
-import { Flex, HeaderText, StyledLink } from ".";
+import { Flex, HeaderText, StyledLink } from "../index";
 
 class ChatList extends Component {
   constructor(props) {
@@ -21,12 +21,9 @@ class ChatList extends Component {
   }
 
   render() {
+    console.log("STATE", this.state);
     return (
-      <Flex
-        width="400px"
-        // borderRight="1px solid grey"
-        // borderLeft="1px solid grey"
-      >
+      <Flex width="400px">
         <Flex>
           {this.state.conversations.map(({ ID }) => {
             return (

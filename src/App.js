@@ -1,5 +1,5 @@
 import React, { Component, Fragment } from "react";
-import { BrowserRouter, Route } from "react-router-dom";
+import { BrowserRouter, Route, Switch } from "react-router-dom";
 import { ThemeProvider } from "styled-components";
 import { createStore } from "redux";
 import { Provider } from "react-redux";
@@ -9,7 +9,7 @@ import { PersistGate } from "redux-persist/integration/react";
 
 import configureStore from "./redux/configureStore";
 
-import { Auth, Home, Chat, AllChat, NotFound } from "./views";
+import { Auth, Home, Chat, AllChat, NotFound, CreateChatView } from "./views";
 import rootReducer from "./redux/reducers";
 import DefaultRoute from "./default-route";
 
@@ -25,15 +25,12 @@ class App extends Component {
   render() {
     return (
       <Provider store={store}>
-        <PersistGate
-          loading={props => <div>loading...</div>}
-          persistor={persistor}
-        >
+        <PersistGate loading={<div>loading...</div>} persistor={persistor}>
           {/* Global Style reset */}
           <GlobalStyles />
           <ThemeProvider theme={theme}>
             <BrowserRouter>
-              <div>
+              <Switch>
                 <DefaultRoute exact path="/login" component={Auth} />
                 <DefaultRoute
                   exact
@@ -42,12 +39,19 @@ class App extends Component {
                   isAuthenticated
                 />
                 <DefaultRoute
+                  exact
+                  path="/chat/new"
+                  component={CreateChatView}
+                  isAuthenticated
+                />
+                <DefaultRoute
+                  exact
                   path="/chat/:roomID([0-9a-fA-F]{8}\-[0-9a-fA-F]{4}\-[0-9a-fA-F]{4}\-[0-9a-fA-F]{4}\-[0-9a-fA-F]{12})"
                   component={Chat}
                   isAuthenticated
                 />
                 <DefaultRoute path="/" component={NotFound} />
-              </div>
+              </Switch>
             </BrowserRouter>
           </ThemeProvider>
         </PersistGate>

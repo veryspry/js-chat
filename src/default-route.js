@@ -1,4 +1,5 @@
 import React, { Fragment } from "react";
+import { withRouter } from "react-router-dom";
 import { Route } from "react-router-dom";
 import { Header, Footer, Flex } from "./components";
 
@@ -17,12 +18,22 @@ const Layout = props => {
 };
 
 const DefaultRoute = props => {
-  const { component: Component, path, isAuthenticated, ...rest } = props;
+  const {
+    component: Component,
+    path,
+    history,
+    isAuthenticated,
+    ...rest
+  } = props;
 
   const currentUser = getCurrentUser();
 
   if (isAuthenticated && !currentUser) {
-    return <NotFound />;
+    // return <NotFound />;
+    console.log(
+      "No current user for this route that requires authentication",
+      props
+    );
   }
 
   return (
@@ -40,4 +51,4 @@ const DefaultRoute = props => {
   );
 };
 
-export default DefaultRoute;
+export default withRouter(DefaultRoute);

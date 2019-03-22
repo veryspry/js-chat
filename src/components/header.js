@@ -11,35 +11,32 @@ import {
   StyledAnchor,
   HeaderText,
   Img,
-  Icon
+  Icon,
+  CreateChat
 } from "../components";
 
-import { logout, requestConstructor } from "../utils";
+import { logout, requestConstructor, getCurrentUser } from "../utils";
 
 const Header = props => {
   const navItems = [
     {
       title: "Chat",
       to: "/chat"
-    },
-    // {
-    //   title: "New Chat",
-    //   to: "/chat",
-    //   onClick: e => {
-    //     e.preventDefault();
-    //     let requestor = requestConstructor();
-    //     requestor
-    //       .post(`/chat/conversations/new`)
-    //       .then(res => console.log("res", res))
-    //       .catch(err => console.log(err));
-    //   }
-    // },
-    {
-      title: "Logout",
-      to: "/login",
-      onClick: e => logout()
     }
   ];
+
+  const currentUser = getCurrentUser();
+
+  const authAction = {
+    text: "Logout",
+    to: "/login",
+    onClick: logout
+  };
+
+  if (!currentUser) {
+    authAction.text = "Login";
+    authAction.onClick = null;
+  }
 
   return (
     <Flex
@@ -81,6 +78,19 @@ const Header = props => {
                 </Box>
               );
             })}
+
+            <Box mx="10px">
+              <StyledLink
+                to={authAction.to}
+                fontWeight="100"
+                color="black"
+                hovercolor="#2096c7"
+                textDecoration="underline"
+                onClick={authAction.onClick}
+              >
+                <HeaderText>{authAction.text}</HeaderText>
+              </StyledLink>
+            </Box>
           </Flex>
         </Flex>
       </Flex>

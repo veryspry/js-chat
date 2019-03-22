@@ -3,50 +3,9 @@ import { withRouter } from "react-router-dom";
 import { connect } from "react-redux";
 import axios from "axios";
 import styled from "styled-components";
-import { height, width, minHeight } from "styled-system";
-import { Flex, FooterText } from "../components";
+import { Flex, FooterText, Form, Input, TextArea, Button } from "../components";
 
 import { setUser } from "../redux/actions";
-
-const Form = styled.form`
-  ${height};
-  ${width};
-  display: flex;
-  flex-direction: column;
-  z-index: 1000;
-`;
-
-const Input = styled.input`
-  width: 100%;
-  height: 30px;
-  border-radius: 3px;
-  border: 1px solid lightgrey;
-  ${height};
-  ${width};
-`;
-
-const TextArea = styled.textarea`
-  width: 100%;
-  max-width: 100%;
-  min-width: 100%;
-  border-radius: 3px;
-  border: 1px solid lightgrey;
-  ${height};
-  ${width};
-  ${minHeight};
-`;
-
-const Button = styled.button`
-  height: 60px;
-  width: 200px;
-  border-radius: 3px;
-  border: 0px;
-  background-color: #181e2f;
-  color: white;
-  &:hover {
-    cursor: pointer;
-  }
-`;
 
 const InputWrap = styled(Flex)`
   margin-top: 10px;
@@ -58,7 +17,8 @@ class Auth extends Component {
     super(props);
     this.state = {
       email: "",
-      password: ""
+      password: "",
+      errorMsg: ""
     };
   }
 
@@ -83,6 +43,12 @@ class Auth extends Component {
           data: { isAuthenticated, message, user }
         } = res;
 
+        if (message === "Email address not found") {
+          this.setState({
+            errorMsg: "Email or password does not exist"
+          });
+        }
+
         if (isAuthenticated) {
           setUser(user);
           history.push("/chat");
@@ -94,6 +60,7 @@ class Auth extends Component {
   render() {
     return (
       <Flex flexDirection="column" alignItems="center" my="70px">
+        <FooterText color="red">{this.state.errorMsg}</FooterText>
         <Form width={["95vw", "80vw", "600px"]}>
           <InputWrap>
             <FooterText>Email:</FooterText>
