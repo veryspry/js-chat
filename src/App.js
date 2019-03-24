@@ -31,7 +31,60 @@ class App extends Component {
           <ThemeProvider theme={theme}>
             <BrowserRouter>
               <Switch>
-                <DefaultRoute exact path="/login" component={Auth} />
+                <DefaultRoute
+                  exact
+                  path="/login"
+                  component={Auth}
+                  config={{
+                    apiPath: "/login",
+                    buttonText: "Login",
+                    action: {
+                      text: "Don't have an account? Create one here!",
+                      path: "/user/new"
+                    },
+                    fields: [
+                      {
+                        title: "Email:",
+                        name: "email"
+                      },
+                      {
+                        title: "Password",
+                        name: "password"
+                      }
+                    ]
+                  }}
+                />
+                <DefaultRoute
+                  exact
+                  path="/user/new"
+                  component={Auth}
+                  config={{
+                    apiPath: "/user/new",
+                    buttonText: "Create User",
+                    action: {
+                      text: "Already have an account? Login here!",
+                      path: "/login"
+                    },
+                    fields: [
+                      {
+                        title: "First Name:",
+                        name: "firstName"
+                      },
+                      {
+                        title: "Last Name:",
+                        name: "lastName"
+                      },
+                      {
+                        title: "Email:",
+                        name: "email"
+                      },
+                      {
+                        title: "Password",
+                        name: "password"
+                      }
+                    ]
+                  }}
+                />
                 <DefaultRoute
                   exact
                   path="/chat"

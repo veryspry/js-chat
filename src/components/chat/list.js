@@ -21,11 +21,11 @@ class ChatList extends Component {
   }
 
   render() {
-    console.log("STATE", this.state);
+    const { conversations } = this.state;
     return (
       <Flex width="400px">
         <Flex>
-          {this.state.conversations.map(({ ID }) => {
+          {conversations.map(({ ID }) => {
             return (
               <Flex
                 key={ID}
@@ -39,6 +39,12 @@ class ChatList extends Component {
               </Flex>
             );
           })}
+          {conversations.length <= 0 && (
+            <HeaderText>
+              You currently have no conversations.{" "}
+              <StyledLink to="/chat/new">Create a new conversation?</StyledLink>
+            </HeaderText>
+          )}
         </Flex>
       </Flex>
     );

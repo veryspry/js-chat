@@ -20,8 +20,12 @@ import { logout, requestConstructor, getCurrentUser } from "../utils";
 const Header = props => {
   const navItems = [
     {
-      title: "Chat",
+      title: "All Chats",
       to: "/chat"
+    },
+    {
+      title: "New Chat",
+      to: "/chat/new"
     }
   ];
 
@@ -57,9 +61,9 @@ const Header = props => {
           justifyContent="space-between"
           py="40px"
         >
-          <HeaderText>
-            <StyledLink to="/chat">Go Chat!</StyledLink> 💬{" "}
-          </HeaderText>
+          {currentUser && currentUser.firstName && (
+            <HeaderText>Hey, {currentUser.firstName}! 💬 </HeaderText>
+          )}
 
           <Flex flexDirection="row">
             {navItems.map(({ title, to, onClick }) => {

@@ -3,7 +3,16 @@ import { withRouter } from "react-router-dom";
 import { connect } from "react-redux";
 import axios from "axios";
 import styled from "styled-components";
-import { Flex, FooterText, Form, Input, TextArea, Button } from "../components";
+import {
+  Flex,
+  FooterText,
+  Form,
+  Input,
+  TextArea,
+  Button,
+  StyledLink,
+  TimelineDate
+} from "../components";
 
 import { setUser } from "../redux/actions";
 
@@ -16,6 +25,8 @@ class Auth extends Component {
   constructor(props) {
     super(props);
     this.state = {
+      firstName: "",
+      lastName: "",
       email: "",
       password: "",
       errorMsg: ""
@@ -32,11 +43,19 @@ class Auth extends Component {
   _handleSubmit = async event => {
     event.preventDefault();
 
+    let { config } = this.props;
+    let { apiPath, fields } = config;
+
+    const fieldNames = fields.map(field => (field = field.name));
+
+    let requestBody = {};
+
+    fieldNames.forEach(name => {
+      return (requestBody[name] = this.state[name]);
+    });
+
     axios
-      .post("http://dev.com:8080/login", {
-        email: this.state.email,
-        password: this.state.password
-      })
+      .post(`http://dev.com:8080${apiPath}`, requestBody)
       .then(res => {
         const { history, setUser } = this.props;
         const {
@@ -58,31 +77,33 @@ class Auth extends Component {
   };
 
   render() {
+    let { config } = this.props;
+    let { buttonText, action, fields } = config;
+
     return (
       <Flex flexDirection="column" alignItems="center" my="70px">
         <FooterText color="red">{this.state.errorMsg}</FooterText>
         <Form width={["95vw", "80vw", "600px"]}>
-          <InputWrap>
-            <FooterText>Email:</FooterText>
-            <Input
-              type="text"
-              name="email"
-              value={this.state.email}
-              onChange={this._handleChange}
-            />
-          </InputWrap>
-          <InputWrap>
-            <FooterText>Password:</FooterText>
-            <Input
-              type="text"
-              name="password"
-              value={this.state.password}
-              onChange={this._handleChange}
-            />
-          </InputWrap>
-          <InputWrap alignItems="flex-end">
+          {fields.map(({ title, name }) => {
+            return (
+              <InputWrap key={name}>
+                <FooterText>{title}</FooterText>
+                <Input
+                  type="text"
+                  name={name}
+                  value={this.state[name]}
+                  onChange={this._handleChange}
+                />
+              </InputWrap>
+            );
+          })}
+          <InputWrap flexDirection="row" justifyContent="space-between">
+            <StyledLink to={action.path}>
+              {" "}
+              <TimelineDate>{action.text}</TimelineDate>{" "}
+            </StyledLink>
             <Button type="submit" value="submit" onClick={this._handleSubmit}>
-              <FooterText>Send</FooterText>
+              <FooterText>{buttonText}</FooterText>
             </Button>
           </InputWrap>
         </Form>
