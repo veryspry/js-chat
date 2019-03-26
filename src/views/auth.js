@@ -55,7 +55,7 @@ class Auth extends Component {
     });
 
     axios
-      .post(`http://dev.com:8080${apiPath}`, requestBody)
+      .post(`${process.env.REACT_APP_API_URL}${apiPath}`, requestBody)
       .then(res => {
         const { history, setUser } = this.props;
         const {

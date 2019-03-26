@@ -85,7 +85,9 @@ class Chat extends Component {
       })
       .catch(err => console.log(err));
 
-    this.ws = new WebSocket(`ws://dev.com:8080/ws/${roomID}?userID=${userID}`);
+    this.ws = new WebSocket(
+      `${process.env.REACT_WEBSOCKET_BASE_URL}/${roomID}?userID=${userID}`
+    );
     this.ws.addEventListener("message", this._handleNewMessage);
   }
 
