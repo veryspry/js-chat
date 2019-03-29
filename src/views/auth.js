@@ -15,6 +15,7 @@ import {
 } from "../components";
 
 import { setUser } from "../redux/actions";
+import { getCurrentUser } from "../utils";
 
 const InputWrap = styled(Flex)`
   margin-top: 10px;
@@ -25,18 +26,42 @@ class Auth extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      firstName: "",
-      lastName: "",
-      email: "",
-      password: "",
+      firstName: {
+        value: "",
+        err: null
+      },
+      lastName: {
+        value: "",
+        err: null
+      },
+      email: {
+        value: "",
+        err: null
+      },
+      password: {
+        value: "",
+        err: null
+      },
       errorMsg: ""
     };
   }
 
-  _handleChange = event => {
+  componentDidMount() {
+    const { history } = this.props;
+    if (getCurrentUser()) history.push("/chat");
+  }
+
+  _handleChange = (event, validate) => {
     const { name, value } = event.target;
+    let err = null;
+
+    if (value != "" && validate && !validate(value)) err = `${name} not valid`;
+
     this.setState({
-      [name]: value
+      [name]: {
+        value,
+        err
+      }
     });
   };
 
@@ -51,7 +76,7 @@ class Auth extends Component {
     let requestBody = {};
 
     fieldNames.forEach(name => {
-      return (requestBody[name] = this.state[name]);
+      return (requestBody[name] = this.state[name].value);
     });
 
     axios
@@ -84,15 +109,18 @@ class Auth extends Component {
       <Flex flexDirection="column" alignItems="center" my="70px">
         <FooterText color="red">{this.state.errorMsg}</FooterText>
         <Form width={["95vw", "80vw", "600px"]}>
-          {fields.map(({ title, name }) => {
+          {fields.map(({ title, name, type, validate }) => {
             return (
               <InputWrap key={name}>
                 <FooterText>{title}</FooterText>
+                <FooterText color="red">{this.state[name].err}</FooterText>
                 <Input
-                  type="text"
+                  type={type || "text"}
                   name={name}
-                  value={this.state[name]}
-                  onChange={this._handleChange}
+                  value={this.state[name].value}
+                  onChange={event => {
+                    this._handleChange(event, validate);
+                  }}
                 />
               </InputWrap>
             );

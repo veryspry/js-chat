@@ -12,6 +12,7 @@ import configureStore from "./redux/configureStore";
 import { Auth, Home, Chat, AllChat, NotFound, CreateChatView } from "./views";
 import rootReducer from "./redux/reducers";
 import DefaultRoute from "./default-route";
+import { validateEmail } from "./utils";
 
 import GlobalStyles from "./styles/global";
 
@@ -45,11 +46,13 @@ class App extends Component {
                     fields: [
                       {
                         title: "Email:",
-                        name: "email"
+                        name: "email",
+                        validate: validateEmail
                       },
                       {
                         title: "Password",
-                        name: "password"
+                        name: "password",
+                        type: "password"
                       }
                     ]
                   }}
@@ -76,11 +79,13 @@ class App extends Component {
                       },
                       {
                         title: "Email:",
-                        name: "email"
+                        name: "email",
+                        validate: validateEmail
                       },
                       {
                         title: "Password",
-                        name: "password"
+                        name: "password",
+                        type: "password"
                       }
                     ]
                   }}
