@@ -28,13 +28,9 @@ const DefaultRoute = props => {
 
   const currentUser = getCurrentUser();
 
-  if (isAuthenticated && !currentUser) {
-    return history.push("/login");
-    console.log(
-      "No current user for this route that requires authentication",
-      props
-    );
-  }
+  if (isAuthenticated && !currentUser) return history.push("/login");
+
+  if (path === "/") history.push("/login");
 
   return (
     <Layout>
