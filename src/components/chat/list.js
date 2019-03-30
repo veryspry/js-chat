@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import axios from "axios";
 import requestConstructor from "../../utils/request";
+import { getCurrentUser } from "../../utils";
 
 import { Flex, HeaderText, StyledLink } from "../index";
 
@@ -8,11 +9,15 @@ class ChatList extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      conversations: []
+      conversations: [],
+      currentUser: null
     };
   }
 
   async componentDidMount() {
+    this.setState({
+      currentUser: getCurrentUser()
+    });
     let requestor = requestConstructor();
     requestor
       .get(`/chat/conversations`)
@@ -21,11 +26,19 @@ class ChatList extends Component {
   }
 
   render() {
-    const { conversations } = this.state;
+    const { conversations, currentUser } = this.state;
     return (
       <Flex width="400px">
         <Flex>
-          {conversations.map(({ ID }) => {
+          {conversations.map(({ ID, Users }) => {
+            const formattedNames = Users.filter(user => {
+              return user.ID != currentUser.ID;
+            }).reduce(
+              (accumulator, { firstName, lastName }) =>
+                `${firstName} ${lastName} ${accumulator}`,
+              ""
+            );
+
             return (
               <Flex
                 key={ID}
@@ -34,7 +47,9 @@ class ChatList extends Component {
                 pb="2px"
               >
                 <HeaderText>
-                  <StyledLink to={`/chat/${ID}`}>{ID}</StyledLink>
+                  <StyledLink to={`/chat/${ID}`}>
+                    Conversation with: {formattedNames}
+                  </StyledLink>
                 </HeaderText>
               </Flex>
             );
