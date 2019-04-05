@@ -79,7 +79,7 @@ class Chat extends Component {
       .then(res => {
         if (res.data.messages) {
           this.setState({
-            messages: res.data.messages.Value
+            messages: res.data.messages
           });
         }
       })
@@ -136,36 +136,35 @@ class Chat extends Component {
 
   render() {
     const { id: currUsrID } = this.props.user;
-    console.log(this.state.messages);
-    console.log(currUsrID);
+
     return (
       <Flex flexDirection="column" alignItems="center" my="70px">
         <Form width={["95vw", "80vw", "600px"]}>
           <Flex>
-            {this.state.messages.map(
-              ({ message, userID, user: { firstName } }, i) => {
-                let bgColor = "lightblue";
-                let align = "flex-start";
-                let name = firstName;
-                if (userID === currUsrID) {
-                  bgColor = "lightgrey";
-                  align = "flex-end";
-                  name = "me";
-                }
-                return (
-                  <Flex key={i} width="100%" alignItems={align} mb="4px">
-                    <Flex width="50%">
-                      <Flex alignItems="left" pl="6px">
-                        <HeaderText fontSize="0.7rem">{name}</HeaderText>
-                      </Flex>
-                      <Flex bg={bgColor} borderRadius="4px" p="4px">
-                        <FooterText>{message}</FooterText>
-                      </Flex>
+            {this.state.messages.map(({ message, userID, user }, i) => {
+              let bgColor = "lightblue";
+              let align = "flex-start";
+              const { firstName } = user;
+              let senderName = firstName;
+
+              if (userID === currUsrID) {
+                bgColor = "lightgrey";
+                align = "flex-end";
+                senderName = "Me";
+              }
+              return (
+                <Flex key={i} width="100%" alignItems={align} mb="4px">
+                  <Flex width="50%">
+                    <Flex alignItems="left" pl="6px">
+                      <HeaderText fontSize="0.7rem">{senderName}</HeaderText>
+                    </Flex>
+                    <Flex bg={bgColor} borderRadius="4px" p="4px">
+                      <FooterText>{message}</FooterText>
                     </Flex>
                   </Flex>
-                );
-              }
-            )}
+                </Flex>
+              );
+            })}
           </Flex>
           <InputWrap>
             <FooterText>Message:</FooterText>
