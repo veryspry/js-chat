@@ -144,9 +144,13 @@ class Chat extends Component {
             {this.state.messages.map(({ message, userID, user }, i) => {
               let bgColor = "lightblue";
               let align = "flex-start";
-              const { firstName } = user;
-              let senderName = firstName;
-
+              let senderName;
+              if (user) {
+                const { firstName } = user;
+                if (firstName) {
+                  senderName = firstName;
+                }
+              }
               if (userID === currUsrID) {
                 bgColor = "lightgrey";
                 align = "flex-end";
