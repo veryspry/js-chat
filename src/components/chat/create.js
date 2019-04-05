@@ -14,6 +14,10 @@ import {
 
 import { requestConstructor } from "../../utils";
 
+const FlexPointer = styled(Flex)`
+  cursor: pointer;
+`;
+
 class CreateChat extends Component {
   constructor(props) {
     super(props);
@@ -61,7 +65,7 @@ class CreateChat extends Component {
 
   _createConversation = event => {
     event.preventDefault();
-    let userIDs = this.state.users.map(user => user.ID);
+    let userIDs = this.state.users.map(user => user.id);
     this.requestor
       .post("/chat/conversations/new", {
         userIDs
@@ -69,7 +73,7 @@ class CreateChat extends Component {
       .then(res => {
         let { conversation } = res.data;
         if (conversation) {
-          this.props.history.push(`/chat/${conversation.ID}`);
+          this.props.history.push(`/chat/${conversation.id}`);
         }
       })
       .catch(err => console.log(err));
@@ -78,7 +82,7 @@ class CreateChat extends Component {
   _removeUserFromList = event => {
     let id = event.target.getAttribute("id");
     this.setState({
-      users: this.state.users.filter(user => user.ID != id)
+      users: this.state.users.filter(user => user.id != id)
     });
   };
 
@@ -91,13 +95,13 @@ class CreateChat extends Component {
         )}
         {users.map(user => {
           return (
-            <Flex key={user.ID} flexDirection="row">
+            <Flex key={user.id} flexDirection="row">
               <Flex mr="10px">
                 <FooterText>{user.email}</FooterText>
               </Flex>
-              <Flex onClick={this._removeUserFromList}>
-                <span id={user.ID}> Remove (x)</span>
-              </Flex>
+              <FlexPointer onClick={this._removeUserFromList}>
+                <span id={user.id}> Remove (x)</span>
+              </FlexPointer>
             </Flex>
           );
         })}
@@ -124,13 +128,15 @@ class CreateChat extends Component {
               <FooterText>Find user</FooterText>
             </Button>
           </Flex>
-          <Flex my="10px">
-            <Button>
-              <FooterText onClick={this._createConversation}>
-                Create Conversation
-              </FooterText>
-            </Button>
-          </Flex>
+          {users.length > 0 && (
+            <Flex my="10px">
+              <Button>
+                <FooterText onClick={this._createConversation}>
+                  Create Conversation
+                </FooterText>
+              </Button>
+            </Flex>
+          )}
         </Form>
       </Flex>
     );

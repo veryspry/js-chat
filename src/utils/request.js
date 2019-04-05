@@ -11,11 +11,11 @@ export const requestConstructor = () => {
     return null;
   }
 
-  const { ID, token } = user;
+  const { id, token } = user;
 
   return axios.create({
     baseURL: process.env.REACT_APP_API_URL,
-    headers: { UserID: ID, Authorization: `Bearer ${token}` }
+    headers: { UserID: id, Authorization: `Bearer ${token}` }
   });
 };
 

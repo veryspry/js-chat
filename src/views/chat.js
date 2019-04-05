@@ -3,7 +3,7 @@ import { withRouter } from "react-router-dom";
 import { connect } from "react-redux";
 import styled from "styled-components";
 import { height, width, minHeight } from "styled-system";
-import { Flex, FooterText } from "../components";
+import { Flex, FooterText, HeaderText } from "../components";
 import requestConstructor from "../utils/request";
 
 import { setAuthToken } from "../redux/actions";
@@ -69,7 +69,7 @@ class Chat extends Component {
       match: {
         params: { roomID }
       },
-      user: { ID: userID }
+      user: { id: userID }
     } = this.props;
 
     const requestor = requestConstructor();
@@ -86,7 +86,7 @@ class Chat extends Component {
       .catch(err => console.log(err));
 
     this.ws = new WebSocket(
-      `${process.env.REACT_APP_API_URL}/ws/${roomID}?userID=${userID}`
+      `${process.env.REACT_WEBSOCKET_BASE_URL}/${roomID}?userID=${userID}`
     );
     this.ws.addEventListener("message", this._handleNewMessage);
   }
@@ -119,7 +119,7 @@ class Chat extends Component {
     event.preventDefault();
     const { message } = this.state;
     const {
-      user: { ID: userID }
+      user: { id: userID }
     } = this.props;
 
     const formattedMsg = {
@@ -135,26 +135,37 @@ class Chat extends Component {
   };
 
   render() {
-    const { ID: currUsrID } = this.props.user;
+    const { id: currUsrID } = this.props.user;
+    console.log(this.state.messages);
+    console.log(currUsrID);
     return (
       <Flex flexDirection="column" alignItems="center" my="70px">
         <Form width={["95vw", "80vw", "600px"]}>
           <Flex>
-            {this.state.messages.map(({ message, userID }, i) => {
-              let bgColor = "lightblue";
-              let align = "flex-start";
-              if (userID === currUsrID) {
-                bgColor = "lightgrey";
-                align = "flex-end";
-              }
-              return (
-                <Flex key={i} width="100%" alignItems={align}>
-                  <Flex bg={bgColor} width="50%">
-                    <FooterText>{message}</FooterText>
+            {this.state.messages.map(
+              ({ message, userID, user: { firstName } }, i) => {
+                let bgColor = "lightblue";
+                let align = "flex-start";
+                let name = firstName;
+                if (userID === currUsrID) {
+                  bgColor = "lightgrey";
+                  align = "flex-end";
+                  name = "me";
+                }
+                return (
+                  <Flex key={i} width="100%" alignItems={align} mb="4px">
+                    <Flex width="50%">
+                      <Flex alignItems="left" pl="6px">
+                        <HeaderText fontSize="0.7rem">{name}</HeaderText>
+                      </Flex>
+                      <Flex bg={bgColor} borderRadius="4px" p="4px">
+                        <FooterText>{message}</FooterText>
+                      </Flex>
+                    </Flex>
                   </Flex>
-                </Flex>
-              );
-            })}
+                );
+              }
+            )}
           </Flex>
           <InputWrap>
             <FooterText>Message:</FooterText>

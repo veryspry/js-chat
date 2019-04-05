@@ -30,26 +30,20 @@ class ChatList extends Component {
     return (
       <Flex width="400px">
         <Flex>
-          {conversations.map(({ ID, Users }) => {
-            const formattedNames = Users.filter(user => {
-              return user.ID != currentUser.ID;
-            }).reduce(
-              (accumulator, { firstName, lastName }) =>
-                `${firstName} ${lastName} ${accumulator}`,
-              ""
-            );
+          {conversations.map(({ id, users }) => {
+            const formattedNames = users
+              .map(({ firstName, lastName }) => `${firstName} ${lastName}`)
+              .join(", ");
 
             return (
               <Flex
-                key={ID}
+                key={id}
                 borderBottom="1px solid grey"
                 borderTop="1px solid grey"
                 pb="2px"
               >
                 <HeaderText>
-                  <StyledLink to={`/chat/${ID}`}>
-                    Conversation with: {formattedNames}
-                  </StyledLink>
+                  <StyledLink to={`/chat/${id}`}>{formattedNames}</StyledLink>
                 </HeaderText>
               </Flex>
             );
