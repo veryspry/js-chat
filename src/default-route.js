@@ -12,7 +12,7 @@ const Layout = props => {
     <Flex minHeight="100vh">
       <Header />
       {props.children}
-      <Footer />
+      {/* <Footer /> */}
     </Flex>
   );
 };

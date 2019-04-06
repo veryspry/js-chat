@@ -3,7 +3,7 @@ import { withRouter } from "react-router-dom";
 import { connect } from "react-redux";
 import styled from "styled-components";
 import { height, width, minHeight } from "styled-system";
-import { Flex, FooterText } from "../components";
+import { Flex, FooterText, HeaderText } from "../components";
 import requestConstructor from "../utils/request";
 
 import { setAuthToken } from "../redux/actions";
@@ -69,7 +69,7 @@ class Chat extends Component {
       match: {
         params: { roomID }
       },
-      user: { ID: userID }
+      user: { id: userID }
     } = this.props;
 
     const requestor = requestConstructor();
@@ -79,7 +79,7 @@ class Chat extends Component {
       .then(res => {
         if (res.data.messages) {
           this.setState({
-            messages: res.data.messages.Value
+            messages: res.data.messages
           });
         }
       })
@@ -119,7 +119,7 @@ class Chat extends Component {
     event.preventDefault();
     const { message } = this.state;
     const {
-      user: { ID: userID }
+      user: { id: userID }
     } = this.props;
 
     const formattedMsg = {
@@ -135,22 +135,36 @@ class Chat extends Component {
   };
 
   render() {
-    const { ID: currUsrID } = this.props.user;
+    const { id: currUsrID } = this.props.user;
+
     return (
       <Flex flexDirection="column" alignItems="center" my="70px">
         <Form width={["95vw", "80vw", "600px"]}>
           <Flex>
-            {this.state.messages.map(({ message, userID }, i) => {
+            {this.state.messages.map(({ message, userID, user }, i) => {
               let bgColor = "lightblue";
               let align = "flex-start";
+              let senderName;
+              if (user) {
+                const { firstName } = user;
+                if (firstName) {
+                  senderName = firstName;
+                }
+              }
               if (userID === currUsrID) {
                 bgColor = "lightgrey";
                 align = "flex-end";
+                senderName = "Me";
               }
               return (
-                <Flex key={i} width="100%" alignItems={align}>
-                  <Flex bg={bgColor} width="50%">
-                    <FooterText>{message}</FooterText>
+                <Flex key={i} width="100%" alignItems={align} mb="4px">
+                  <Flex width="50%">
+                    <Flex alignItems="left" pl="6px">
+                      <HeaderText fontSize="0.7rem">{senderName}</HeaderText>
+                    </Flex>
+                    <Flex bg={bgColor} borderRadius="4px" p="4px">
+                      <FooterText>{message}</FooterText>
+                    </Flex>
                   </Flex>
                 </Flex>
               );
