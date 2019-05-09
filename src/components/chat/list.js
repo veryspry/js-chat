@@ -19,10 +19,12 @@ class ChatList extends Component {
       currentUser: getCurrentUser()
     });
     let requestor = requestConstructor();
-    requestor
-      .get(`/chat/conversations`)
-      .then(res => this.setState({ conversations: res.data.conversations }))
-      .catch(err => console.log(err));
+    if (requestor) {
+      requestor
+        .get(`/chat/conversations`)
+        .then(res => this.setState({ conversations: res.data.conversations }))
+        .catch(err => console.log(err));
+    }
   }
 
   render() {

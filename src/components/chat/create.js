@@ -9,7 +9,8 @@ import {
   TextArea,
   Button,
   FooterText,
-  Footer
+  Footer,
+  TimelineDate
 } from "../../components";
 
 import { requestConstructor } from "../../utils";
@@ -24,21 +25,22 @@ class CreateChat extends Component {
     this.state = {
       currentFormInput: "",
       errorMessage: "",
-      users: []
+      users: [],
+      tempUser: null
     };
     this.requestor = requestConstructor();
   }
 
-  _handleChange = event => {
+  _handleChange = async event => {
     const { name, value } = event.target;
-    this.setState({
+    await this.setState({
       [name]: value
     });
+    this._findUser();
   };
 
-  _lookupUser = event => {
+  _findUser = event => {
     let { users, currentFormInput } = this.state;
-    event.preventDefault();
     this.requestor
       .get("/user", {
         params: {
@@ -56,11 +58,22 @@ class CreateChat extends Component {
           }
         }
         this.setState({
-          users: [...users, res.data.user],
-          currentFormInput: ""
+          errorMessage: "User found",
+          tempUser: res.data.user
         });
       })
       .catch(err => console.log(err));
+  };
+
+  _addUser = event => {
+    const { users, tempUser } = this.state;
+    event.preventDefault();
+    this.setState({
+      users: [...users, tempUser],
+      currentFormInput: "",
+      errorMessage: "",
+      tempUser: null
+    });
   };
 
   _createConversation = event => {
@@ -88,6 +101,7 @@ class CreateChat extends Component {
 
   render() {
     const { users, currentFormInput, errorMessage } = this.state;
+
     return (
       <Flex>
         {users.length > 0 && (
@@ -97,10 +111,13 @@ class CreateChat extends Component {
           return (
             <Flex key={user.id} flexDirection="row">
               <Flex mr="10px">
-                <FooterText>{user.email}</FooterText>
+                <FooterText color="grey">{user.email}</FooterText>
               </Flex>
-              <FlexPointer onClick={this._removeUserFromList}>
-                <span id={user.id}> Remove (x)</span>
+              <FlexPointer
+                onClick={this._removeUserFromList}
+                justifyContent="center"
+              >
+                <TimelineDate id={user.id}> Remove (x)</TimelineDate>
               </FlexPointer>
             </Flex>
           );
@@ -109,6 +126,12 @@ class CreateChat extends Component {
           <Flex my="10px">
             <FooterText>Type in a users email to find them</FooterText>
           </Flex>
+          {errorMessage.length > 0 && currentFormInput.length > 0 && (
+            <Flex mt="2px" mb="10px">
+              {" "}
+              <FooterText color="error">{errorMessage}</FooterText>
+            </Flex>
+          )}
           <Flex my="10px">
             <Input
               type="text"
@@ -117,15 +140,9 @@ class CreateChat extends Component {
               onChange={this._handleChange}
             />
           </Flex>
-          {errorMessage.length > 0 && (
-            <Flex my="10px">
-              {" "}
-              <FooterText>{errorMessage}</FooterText>
-            </Flex>
-          )}
           <Flex my="10px">
-            <Button onClick={this._lookupUser}>
-              <FooterText>Find user</FooterText>
+            <Button onClick={this._addUser}>
+              <FooterText>Add user</FooterText>
             </Button>
           </Flex>
           {users.length > 0 && (
