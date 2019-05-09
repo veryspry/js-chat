@@ -4,6 +4,7 @@ export default {
     white: "white",
     // TODO: Finish this
     link: "#00c8fa",
-    bluePurple: "#0046cb"
+    bluePurple: "#0046cb",
+    error: "#C5003F"
   }
 };

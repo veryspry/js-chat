@@ -25,8 +25,7 @@ module.exports = () => {
       hot: false,
       open: false,
       overlay: true,
-      historyApiFallback: true,
-      host: "dev.com"
+      historyApiFallback: true
     },
     module: {
       rules: [
