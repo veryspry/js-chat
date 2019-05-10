@@ -9,6 +9,7 @@ export const HeaderText = styled.h1`
   z-index: 4000;
   ${zIndex};
   ${fontSize};
+  ${fontWeight};
 `;
 
 export const BodyHome = styled.h3`

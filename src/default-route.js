@@ -1,7 +1,7 @@
 import React, { Fragment } from "react";
 import { withRouter } from "react-router-dom";
 import { Route } from "react-router-dom";
-import { Header, Footer, Flex } from "./components";
+import { Header, Flex } from "./components";
 
 import { NotFound } from "./views";
 
@@ -12,7 +12,6 @@ const Layout = props => {
     <Flex minHeight="100vh">
       <Header />
       {props.children}
-      {/* <Footer /> */}
     </Flex>
   );
 };
@@ -28,9 +27,9 @@ const DefaultRoute = props => {
 
   const currentUser = getCurrentUser();
 
-  if (isAuthenticated && !currentUser) return history.push("/login");
-
-  if (path === "/") history.push("/login");
+  if ((isAuthenticated && !currentUser) || path === "/") {
+    history.push("/login");
+  }
 
   return (
     <Layout>
