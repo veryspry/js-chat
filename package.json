@@ -5,7 +5,7 @@
   "homepage": "https://veryspry.com",
   "proxy": "http://localhost:9000",
   "scripts": {
-    "dev": "webpack-dev-server --progress",
+    "dev": "webpack-dev-server --env.NODE_ENV=development --progress",
     "build": "webpack --mode='production'"
   },
   "eslintConfig": {
