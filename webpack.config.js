@@ -6,15 +6,6 @@ const dotenv = require("dotenv");
 module.exports = environment => {
   // defaults to production values
   let envPath = path.join(__dirname, ".env");
-  // set NODE_ENV in development mode
-
-  if (
-    environment &&
-    environment.NODE_ENV &&
-    environment.NODE_ENV == "development"
-  ) {
-    envPath = path.join(__dirname, ".env.development");
-  }
 
   const env = dotenv.config({ path: envPath }).parsed;
   const envKeys = Object.keys(env).reduce((prev, next) => {

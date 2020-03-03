@@ -33,7 +33,7 @@ const DefaultRoute = props => {
 
   return (
     <Layout>
-      <Route {...props} component={() => <Component {...props} />} />
+      <Route {...rest} component={() => <Component {...rest} />} />
     </Layout>
   );
 };

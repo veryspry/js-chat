@@ -28,7 +28,7 @@ class ChatList extends Component {
   }
 
   render() {
-    const { conversations, currentUser } = this.state;
+    const { conversations, } = this.state;
     return (
       <Flex width="400px">
         <Flex>

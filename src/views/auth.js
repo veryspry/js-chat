@@ -8,7 +8,6 @@ import {
   FooterText,
   Form,
   Input,
-  TextArea,
   Button,
   StyledLink,
   TimelineDate
@@ -67,9 +66,8 @@ class Auth extends Component {
 
   _handleSubmit = async event => {
     event.preventDefault();
-
-    let { config } = this.props;
-    let { apiPath, fields } = config;
+    const { config } = this.props;
+    const { apiPath, fields } = config;
 
     const fieldNames = fields.map(field => (field = field.name));
 
@@ -102,8 +100,8 @@ class Auth extends Component {
   };
 
   render() {
-    let { config } = this.props;
-    let { buttonText, action, fields } = config;
+    const { config } = this.props;
+    const { buttonText, action, fields } = config;
 
     return (
       <Flex flexDirection="column" alignItems="center" my="70px">
